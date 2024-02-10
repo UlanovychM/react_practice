@@ -1,0 +1,22 @@
+import './App.css';
+import { Product } from './Product/Product';
+import { Mailbox } from './Mailbox/Mailbox';
+
+function App() {
+	return (
+		<div>
+			<h1>Products</h1>
+
+			<Product name='Tacos With Lime' price={10.99} />
+			<Product
+				name='Fries and Burger'
+				imgUrl='https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg?dpr=2&h=480&w=640'
+				price={14.29}
+			/>
+
+			<Mailbox />
+		</div>
+	);
+}
+
+export default App;
