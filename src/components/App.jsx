@@ -1,6 +1,13 @@
 import './App.css';
 import { Product } from './Product/Product';
 import { Mailbox } from './Mailbox/Mailbox';
+import { BookList } from './BooksList/BooksList';
+
+const favouriteBooks = [
+	{ id: 'id-1', name: 'JS for beginners' },
+	{ id: 'id-2', name: 'React basics' },
+	{ id: 'id-3', name: 'React Router overview' },
+];
 
 function App() {
 	return (
@@ -14,7 +21,11 @@ function App() {
 				price={14.29}
 			/>
 
+			<h1>Mailbox</h1>
 			<Mailbox />
+
+			<h1>Books of the week</h1>
+			<BookList books={favouriteBooks} />
 		</div>
 	);
 }
