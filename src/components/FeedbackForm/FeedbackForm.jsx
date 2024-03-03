@@ -1,5 +1,21 @@
 import { useId } from 'react';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+
+// Параметри валідації
+
+const FeedbackSchema = Yup.object().shape({
+	username: Yup.string()
+		.min(2, 'Too Short!')
+		.max(50, 'Too Long!')
+		.required('Required'),
+	email: Yup.string().email('Must be a valid email!').required('Required'),
+	message: Yup.string()
+		.min(3, 'Too short')
+		.max(256, 'Too long')
+		.required('Required'),
+	level: Yup.string().oneOf(['good', 'neutral', 'bad']).required('Required'),
+});
 
 const initialValues = {
 	username: '',
@@ -20,20 +36,40 @@ const FeedbackForm = () => {
 	};
 
 	return (
-		<Formik initialValues={initialValues} onSubmit={handleSubmit}>
+		<Formik
+			initialValues={initialValues}
+			onSubmit={handleSubmit}
+			validationSchema={FeedbackSchema}
+		>
 			<Form>
-				<label htmlFor={nameFieldId}>Username</label>
-				<Field type='text' name='username' />
-				<label htmlFor={emailFieldId}>Email</label>
-				<Field type='email' name='email' />
-				<label htmlFor={msgFieldId}>Message</label>
-				<Field as='textarea' name='message' id={msgFieldId} rows='5' />
-				<label htmlFor={levelFieldId}>Service satisfaction level</label>
-				<Field as='select' name='level' id={levelFieldId}>
-					<option value='good'>Good</option>
-					<option value='neutral'>Neutral</option>
-					<option value='bad'>Bad</option>
-				</Field>
+				<div>
+					<label htmlFor={nameFieldId}>Username</label>
+					<Field type='text' name='username' id={nameFieldId} />
+					<ErrorMessage name='username' as='span' />
+				</div>
+
+				<div>
+					<label htmlFor={emailFieldId}>Email</label>
+					<Field type='email' name='email' id={emailFieldId} />
+					<ErrorMessage name='email' as='span' />
+				</div>
+
+				<div>
+					<label htmlFor={msgFieldId}>Message</label>
+					<Field as='textarea' name='message' id={msgFieldId} rows='5' />
+					<ErrorMessage name='message' as='span' />
+				</div>
+
+				<div>
+					<label htmlFor={levelFieldId}>Service satisfaction level</label>
+					<Field as='select' name='level' id={levelFieldId}>
+						<option value='good'>Good</option>
+						<option value='neutral'>Neutral</option>
+						<option value='bad'>Bad</option>
+					</Field>
+					<ErrorMessage name='level' as='span' />
+				</div>
+
 				<button type='submit'>Submit</button>
 			</Form>
 		</Formik>
