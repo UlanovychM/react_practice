@@ -1,5 +1,7 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+import { fetchArticlesWithTopic } from '../articles-api.js';
 // import ClickCounter from './ClickCounter/ClickCounter';
 // import { Product } from './Product/Product';
 // import { Mailbox } from './Mailbox/Mailbox';
@@ -117,14 +119,45 @@ import RadioButton from './RadioButton/RadioButton';
 import ChekboxSwitcher from './ChekboxSwitcher/ChekboxSwitcher';
 import LoginForm from './LoginForm/LoginForm';
 import FeedbackForm from './FeedbackForm/FeedbackForm';
+import ArticleList from './ArticleList/ArticleList';
 
 const App = () => {
 	const [lang, setLang] = useState('uk');
 	const [coffeeSize, setCoffeeSize] = useState('sm');
 	const [hasAccepted, setHasAccepted] = useState(false);
+	const [articles, setArticles] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(false);
+
+	useEffect(() => {
+		// 1. Оголошуємо асинхронну функцію
+		async function fetchArticles() {
+			try {
+				// 1. Встановлюємо індикатор в true перед запитом
+				setLoading(true);
+				const data = await fetchArticlesWithTopic('react');
+				setArticles(data);
+			} catch (error) {
+				// Тут будемо обробляти помилку
+				setError(true);
+			} finally {
+				// 2. Встановлюємо індикатор в false після запиту
+				setLoading(false);
+			}
+		}
+
+		// 2. Викликаємо її одразу після оголошення
+		fetchArticles();
+	}, []);
 
 	return (
 		<>
+			<h1>Latest articles</h1>
+			{loading && <p>Loading data, please wait...</p>}
+			{error && (
+				<p>Whoops, something went wrong! Please try reloading this page!</p>
+			)}
+			{articles.length > 0 && <ArticleList items={articles} />}
 			<p>Selected language: {lang}</p>
 			<LangSwitcher value={lang} onSelect={setLang} />
 			<RadioButton value={coffeeSize} onSelect={setCoffeeSize} />
