@@ -1,5 +1,7 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+// import { useState, useEffect, forwardRef, useRef } from 'react';
+// import { useToggle } from './hooks/useToggle.js';
 
 import { fetchArticlesWithTopic } from '../articles-api.js';
 // import ClickCounter from './ClickCounter/ClickCounter';
@@ -8,7 +10,7 @@ import { fetchArticlesWithTopic } from '../articles-api.js';
 // import { BookList } from './BooksList/BooksList';
 // import { Card } from './Card/Card';
 // import { Alert } from './Alert/Alert';
-// import { UserMenu } from './UserMenu/UserMenu';
+import { UserMenu } from './UserMenu/UserMenu';
 // import { CustomButton } from './CustomButton/CustomButton';
 
 // import UpdateX from './UpdateX/UpdateX';
@@ -120,6 +122,13 @@ import ChekboxSwitcher from './ChekboxSwitcher/ChekboxSwitcher';
 import LoginForm from './LoginForm/LoginForm';
 import FeedbackForm from './FeedbackForm/FeedbackForm';
 import ArticleList from './ArticleList/ArticleList';
+import FilterPlanet from './FiletrPlanet/FiletrPlanet.jsx';
+import RefTest from './RefTest/RefTest.jsx';
+import Player from './Player/Player.jsx';
+
+// const CustomButton = forwardRef((props, ref) => (
+// 	<button ref={ref}>{props.children}</button>
+// ));
 
 const App = () => {
 	const [lang, setLang] = useState('uk');
@@ -129,12 +138,17 @@ const App = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
 
+	// const btnRef = useRef();
+
+	// useEffect(() => btnRef.current.focus(), []);
+
 	useEffect(() => {
 		// 1. Оголошуємо асинхронну функцію
 		async function fetchArticles() {
 			try {
 				// 1. Встановлюємо індикатор в true перед запитом
 				setLoading(true);
+				setError(false);
 				const data = await fetchArticlesWithTopic('react');
 				setArticles(data);
 			} catch (error) {
@@ -152,6 +166,11 @@ const App = () => {
 
 	return (
 		<>
+			<UserMenu />
+			<Player source='http://media.w3.org/2010/05/sintel/trailer.mp4' />
+			{/* <CustomButton ref={btnRef}>Button with forwarded ref</CustomButton> */}
+
+			<RefTest />
 			<h1>Latest articles</h1>
 			{loading && <p>Loading data, please wait...</p>}
 			{error && (
@@ -164,6 +183,7 @@ const App = () => {
 			<ChekboxSwitcher value={hasAccepted} onSelect={setHasAccepted} />
 			<LoginForm />
 			<FeedbackForm />
+			<FilterPlanet />
 		</>
 	);
 };

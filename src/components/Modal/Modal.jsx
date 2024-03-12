@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
+import { useToggle } from '../hooks/useToggle';
 
 const Modal = () => {
+	const { isOpen, open, close } = useToggle();
 	useEffect(() => {
 		// Зберігаємо ідентифікатор інтервалу в змінну
 		const intervalId = setInterval(() => {
@@ -13,7 +15,12 @@ const Modal = () => {
 		};
 	}, []);
 
-	return <div>Modal</div>;
+	return (
+		<div>
+			Modal <button onClick={open}>Open modal</button>
+			<Modal isOpen={isOpen} onClose={close} />
+		</div>
+	);
 };
 
 export default Modal;
